@@ -1,0 +1,4 @@
+node_modules
+dist
+/src/blazor/generated/*
+!/src/blazor/generated/.gitkeep
