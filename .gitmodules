@@ -1,0 +1,4 @@
+[submodule "submodules/aspnet-samples"]
+	path = submodules/aspnet-samples
+	url = git@github.com:yamachu/aspnet-samples.git
+	branch = react-blazor-component
