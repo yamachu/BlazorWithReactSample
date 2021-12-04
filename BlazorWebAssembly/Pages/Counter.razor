@@ -1,4 +1,4 @@
-@attribute [GenerateReact]
+﻿@attribute [GenerateReact]
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
@@ -41,5 +41,12 @@
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    [JSInvokable("FooBarManaged")]
+    public Task<int> FooBar()
+    {
+        System.Console.WriteLine("FooBar: From BlazorComponent");
+        return Task.FromResult(1);
     }
 }
