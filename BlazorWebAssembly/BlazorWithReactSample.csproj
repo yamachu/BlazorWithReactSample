@@ -11,4 +11,15 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\submodules\aspnet-samples\samples\aspnetcore\blazor\JSComponentGeneration\JSComponentGeneration\JSComponentGeneration.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ReactTemplateJSDir>..\React\src\blazor</ReactTemplateJSDir>
+    <BuildAssemblyOutputPath>..\submodules\aspnet-samples\samples\aspnetcore\blazor\JSComponentGeneration\JSComponentGeneration.Build\bin\$(Configuration)\netstandard2.0</BuildAssemblyOutputPath>
+  </PropertyGroup>
+
+  <Import Project="..\submodules\aspnet-samples\samples\aspnetcore\blazor\JSComponentGeneration\JSComponentGeneration.Build\build\netstandard2.0\JSComponentGeneration.build.targets" />
+
 </Project>
