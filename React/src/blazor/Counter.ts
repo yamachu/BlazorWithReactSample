@@ -49,9 +49,14 @@ export const Counter = React.forwardRef<CounterHandler, { title: string }>(
       [dotnetRef]
     );
 
+    const myEventCallback = React.useCallback((v: number) => {
+      console.log(`myEventCallback: ${v}`);
+    }, [])
+
     const fragment = useBlazor("counter", {
       title,
       objectIdentifier: componentKey,
+      myEventCallback
     });
 
     return fragment;

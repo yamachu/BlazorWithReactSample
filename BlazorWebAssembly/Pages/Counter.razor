@@ -14,6 +14,7 @@
     [Parameter] public string ObjectIdentifier { get; set; }
     // GenerateReact を使うコンポーネントは1つ以上の Parameter が必要
     [Parameter] public string Title { get; set; } = "Blazor Component Counter";
+    [Parameter] public EventCallback<int> MyEventCallback { get; set; }
 
     private DotNetObjectReference<Counter>? objRef;
 
@@ -38,9 +39,10 @@
         }
     }
 
-    private void IncrementCount()
+    private async Task IncrementCount()
     {
         currentCount++;
+        await MyEventCallback.InvokeAsync(currentCount);
     }
 
     [JSInvokable("FooBarManaged")]
