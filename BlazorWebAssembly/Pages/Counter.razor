@@ -1,4 +1,6 @@
-﻿@attribute [GenerateReact]
+@attribute [GenerateReact]
+@inject IJSRuntime JSRuntime
+@implements IDisposable
 
 <h1>@Title</h1>
 
@@ -8,8 +10,33 @@
 
 @code {
     private int currentCount = 0;
+
+    [Parameter] public string ObjectIdentifier { get; set; }
     // GenerateReact を使うコンポーネントは1つ以上の Parameter が必要
     [Parameter] public string Title { get; set; } = "Blazor Component Counter";
+
+    private DotNetObjectReference<Counter>? objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("BlazorBridge.setDotnetReference", ObjectIdentifier, objRef);
+        }
+    }
+
+    public async void Dispose()
+    {
+        GC.SuppressFinalize(this);
+
+        if (objRef != null)
+        {
+            await JSRuntime.InvokeVoidAsync("BlazorBridge.removeDotnetReference", ObjectIdentifier);
+            objRef?.Dispose();
+        }
+    }
 
     private void IncrementCount()
     {
