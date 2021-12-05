@@ -11,10 +11,12 @@
 @code {
     private int currentCount = 0;
 
-    [Parameter] public string ObjectIdentifier { get; set; }
     // GenerateReact を使うコンポーネントは1つ以上の Parameter が必要
     [Parameter] public string Title { get; set; } = "Blazor Component Counter";
     [Parameter] public EventCallback<int> MyEventCallback { get; set; }
+
+    [Parameter] public EventCallback<DotNetObjectReference<Counter>> OnComponentInitializedCb { get; set; }
+    [Parameter] public EventCallback OnComponentDestroyedCb { get; set; }
 
     private DotNetObjectReference<Counter>? objRef;
 
@@ -24,7 +26,7 @@
         if (firstRender)
         {
             objRef = DotNetObjectReference.Create(this);
-            await JSRuntime.InvokeVoidAsync("BlazorBridge.setDotnetReference", ObjectIdentifier, objRef);
+            await OnComponentInitializedCb.InvokeAsync(objRef);
         }
     }
 
@@ -34,7 +36,7 @@
 
         if (objRef != null)
         {
-            await JSRuntime.InvokeVoidAsync("BlazorBridge.removeDotnetReference", ObjectIdentifier);
+            await OnComponentInitializedCb.InvokeAsync();
             objRef?.Dispose();
         }
     }
