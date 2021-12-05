@@ -11,7 +11,6 @@
 @code {
     private int currentCount = 0;
 
-    [Parameter] public string ObjectIdentifier { get; set; }
     // GenerateReact を使うコンポーネントは1つ以上の Parameter が必要
     [Parameter] public string Title { get; set; } = "Blazor Component Counter";
     [Parameter] public EventCallback<int> MyEventCallback { get; set; }

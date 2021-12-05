@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 } from "uuid";
 import { type DotnetReference } from "../../types/dotnetReference";
 import { useBlazor } from "./blazor-react";
 
@@ -9,7 +8,6 @@ export interface CounterHandler {
 
 export const Counter = React.forwardRef<CounterHandler, { title: string }>(
   ({ title }, ref) => {
-    const componentKey = React.useMemo(() => v4(), []);
     const [dotnetRef, setDotnetRef] = React.useState<DotnetReference | null>(null);
 
     const onComponentInitializedCb = React.useCallback((dRef) => 
@@ -40,7 +38,6 @@ export const Counter = React.forwardRef<CounterHandler, { title: string }>(
 
     const fragment = useBlazor("counter", {
       title,
-      objectIdentifier: componentKey,
       myEventCallback,
       onComponentInitializedCb,
       onComponentDestroyedCb
