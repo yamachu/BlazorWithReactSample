@@ -12,25 +12,10 @@ export const Counter = React.forwardRef<CounterHandler, { title: string }>(
     const componentKey = React.useMemo(() => v4(), []);
     const [dotnetRef, setDotnetRef] = React.useState<DotnetReference | null>(null);
 
-    React.useEffect(() => {
-      if (componentKey === undefined) {
-        return;
-      }
-      // @ts-ignore
-      const addFuncCb: EventListener = ({ detail }: CustomEvent) => {
-        setDotnetRef(detail.reference);
-      };
-      // @ts-ignore
-      const removeFuncCb: EventListener = ({}: CustomEvent) => {
-        setDotnetRef(null);
-      };
-      window.addEventListener("setDotnetReference", addFuncCb);
-      window.addEventListener("removeDotnetReference", removeFuncCb);
-      return () => {
-        window.removeEventListener("setDotnetReference", addFuncCb);
-        window.removeEventListener("removeDotnetReference", removeFuncCb);
-      };
-    }, [componentKey]);
+    const onComponentInitializedCb = React.useCallback((dRef) => 
+      setDotnetRef(dRef)
+    , []);
+    const onComponentDestroyedCb = React.useCallback(() => setDotnetRef(null), []);
 
     React.useImperativeHandle(
       ref,
@@ -56,7 +41,9 @@ export const Counter = React.forwardRef<CounterHandler, { title: string }>(
     const fragment = useBlazor("counter", {
       title,
       objectIdentifier: componentKey,
-      myEventCallback
+      myEventCallback,
+      onComponentInitializedCb,
+      onComponentDestroyedCb
     });
 
     return fragment;

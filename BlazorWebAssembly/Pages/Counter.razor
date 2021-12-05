@@ -16,6 +16,9 @@
     [Parameter] public string Title { get; set; } = "Blazor Component Counter";
     [Parameter] public EventCallback<int> MyEventCallback { get; set; }
 
+    [Parameter] public EventCallback<DotNetObjectReference<Counter>> OnComponentInitializedCb { get; set; }
+    [Parameter] public EventCallback OnComponentDestroyedCb { get; set; }
+
     private DotNetObjectReference<Counter>? objRef;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -24,7 +27,7 @@
         if (firstRender)
         {
             objRef = DotNetObjectReference.Create(this);
-            await JSRuntime.InvokeVoidAsync("BlazorBridge.setDotnetReference", ObjectIdentifier, objRef);
+            await OnComponentInitializedCb.InvokeAsync(objRef);
         }
     }
 
@@ -34,7 +37,7 @@
 
         if (objRef != null)
         {
-            await JSRuntime.InvokeVoidAsync("BlazorBridge.removeDotnetReference", ObjectIdentifier);
+            await OnComponentInitializedCb.InvokeAsync();
             objRef?.Dispose();
         }
     }
